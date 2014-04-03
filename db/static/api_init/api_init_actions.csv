@@ -8,3 +8,4 @@ patch,metahash,metahash_fields_vocabularies.csv
 delete,vocabularies,
 put,vocabularies,vocabularies_data.csv
 patch,metahash,metahash_fields_smallmolecule.csv
+patch,metahash,metahash_fields_reaction.csv

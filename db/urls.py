@@ -3,12 +3,13 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
 from db import views
-from db.api import SmallMoleculeResource
+from db.api import SmallMoleculeResource, ReactionResource
 
 admin.autodiscover()
 
 v1_api = Api(api_name='v1')
 v1_api.register(SmallMoleculeResource())
+v1_api.register(ReactionResource())
 
 urlpatterns = patterns('',
     url(r'^$', views.main, name="home"),
@@ -27,3 +28,4 @@ urlpatterns = patterns('',
 
     url(r'^reports/', include('reports.urls')),
 )
+

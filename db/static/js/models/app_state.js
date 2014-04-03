@@ -61,6 +61,11 @@ define([
             expanded: false,
             view: 'list'
           },
+          'reaction': {
+            expanded: false,
+            view: 'list'
+          },
+
           'gene': {
             expanded: false,
             view: 'list',
@@ -169,6 +174,17 @@ define([
             url_root: '/db/api/v1',
             description: 'Small Molecules'
           },
+          reaction: {
+            header_message: 'Reaction',
+            title: 'Reaction',
+            route: 'reaction',
+            list_view: 'ListView',
+            detailView: 'DetailView',
+            api_resource: 'reaction',
+            url_root: '/db/api/v1',
+            description: 'Reaction'
+          },
+ 
           gene: {
             header_message: 'Genes',
             title: 'Genes',
