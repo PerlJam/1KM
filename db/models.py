@@ -31,4 +31,21 @@ class Gene(models.Model):
     entrez_id = models.TextField()
     entrez_symbol = models.TextField()
     
+
+class Reaction(models.Model):
+    name = models.TextField()
+    r_id = models.TextField(max_length=8, unique=True)
+    chemical_equation = models.TextField()
+    #substrate(s)
+    #product(s)
+    directionality = models.TextField()
+    #enzyme(s)
+    #subsystem(s)
+    confidence_score = models.TextField()
+    kegg_id = models.TextField()
+    ec_number = models.TextField()
+    alternate_name = models.TextField()
+    reference = models.TextField()
+    comment = models.TextField()
+
     
