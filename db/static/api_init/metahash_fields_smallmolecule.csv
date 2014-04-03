@@ -1,0 +1,5 @@
+key,scope,resource_uri,ordinal,comment,ui_type,filtering,description,title,ordering,json_field_type,vocabulary_scope_ref,visibility,alias,backgrid_cell_type,backgrid_cell_options,is_restricted
+sm_id,fields.smallmolecule,/reports/api/v1/metahash/fields.smallmolecule/sm_id/,1,,string,TRUE,"HMS small molecule ID","HMS Small Molecule ID",TRUE,,,"[list,detail]",,Iccbl.EditCell,,
+name,fields.smallmolecule,/reports/api/v1/metahash/fields.smallmolecule/name/,2,,string,TRUE,Name,Name,TRUE,,,"[list,detail]",,,,
+smiles,fields.smallmolecule,/reports/api/v1/metahash/fields.smallmolecule/smiles/,4,,string,TRUE,"Simplified molecular-input line-entry",SMILES,TRUE,,,"[list,detail]",,,,
+inchi,fields.smallmolecule,/reports/api/v1/metahash/fields.smallmolecule/inchi/,5,,string,TRUE,"IUPAC International Chemical Identifier",InChI,TRUE,,,"[list,detail]",,,,
