@@ -31,6 +31,7 @@ BASE_URI_DB = '/db/api/v1'
 
 
 class TestApiInit(reports.tests.TestApiInit):
+    # FIXME: factor out test_2api_init
     
     def setUp(self):
         super(TestApiInit, self).setUp()
@@ -184,7 +185,7 @@ class SmallMoleculeTest(MetaHashResourceBootstrap,ResourceTestCase):
         
 
     def test1_create_smallmolecule(self):
-        logger.info(str(('==== test1_create_library =====')))
+        logger.info(str(('==== test1_create_smallmolecule =====')))
         
         resource_uri = BASE_URI_DB + '/smallmolecule'
         
@@ -219,3 +220,45 @@ class SmallMoleculeTest(MetaHashResourceBootstrap,ResourceTestCase):
                          item, new_obj['objects'])))
         logger.info(str(('item found', obj)))
 
+    def test2_create_register(self):
+
+        logger.info(str(('==== test2_create_register =====')))
+        
+        resource_uri = BASE_URI_DB + '/smallmolecule'
+        
+        item = SmallMoleculeFactory.attributes()
+        
+        item['sm_id'] = None
+        
+        logger.info(str(('item to post', item)))
+        resp = self.api_client.post(
+            resource_uri, format='json', data=item, 
+            authentication=self.get_credentials())
+        self.assertTrue(resp.status_code in [201], str((resp.status_code, resp)))
+        
+        # create a second smallmolecule
+        item = SmallMoleculeFactory.attributes()
+        item['sm_id'] = None
+        
+        logger.info(str(('item to post', item)))
+        resp = self.api_client.post(
+            resource_uri, format='json', data=item, 
+            authentication=self.get_credentials())
+        self.assertTrue(resp.status_code in [201], str((resp.status_code, resp)))
+        
+        resp = self.api_client.get(
+            resource_uri, format='json', authentication=self.get_credentials(), 
+            data={ 'limit': 999 })
+        logger.info(str(('--------resp to get:', resp.status_code)))
+        new_obj = self.deserialize(resp)
+        self.assertValidJSONResponse(resp)
+        self.assertEqual(len(new_obj['objects']), 2, str((new_obj)))
+
+        result, obj = find_obj_in_list(item, new_obj['objects'],
+                                       excludes=['sm_id'] )
+        self.assertTrue(
+            result, str(('bootstrap item not found', obj, 
+                         item, new_obj['objects'])))
+        logger.info(str(('item found', obj)))
+        self.assertTrue(not obj['sm_id']==None, 
+                        str(('obj returned has no sm_id', obj)))

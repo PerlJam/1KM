@@ -96,6 +96,9 @@ define([
               },
               'permissions':{
                   view: 'list',
+              },
+              'jobs':{
+                view: 'list'
               }
             }
           }
@@ -119,7 +122,20 @@ define([
               content_header: 'Welcome',
               description: 'Menu starting point'
           },
-
+          
+          jobs: {
+            header_message: 'User Jobs',
+            title: 'Jobs',
+            route: 'jobs',
+            listView: 'JobsView',
+            detailView: 'JobView',
+            api_resource: 'jobs',
+            url_root: '/reports/api/v1',
+            options: { },
+            description: 'Jobs'
+            
+          },
+          
           metahash: {
               header_message: 'Define fields for display on detail and list views',
               title: 'Field Information',

@@ -31,7 +31,7 @@ class SmallMoleculeResource(ManagedModelResource):
                                              SessionAuthentication())
         authorization= Authorization()        
         resource_name = 'smallmolecule'
-        
+        always_return_data = True
         ordering = []
         filtering = {}
         serializer = LimsSerializer()
@@ -52,9 +52,15 @@ class SmallMoleculeResource(ManagedModelResource):
             url((r"^(?P<resource_name>%s)/(?P<sm_id>((?=(schema))__|(?!(schema))[^/]+))%s$"
                 )  % (self._meta.resource_name, trailing_slash()), 
                 self.wrap_view('dispatch_detail'), name="api_dispatch_detail"),]
+ 
+    
+    def put_list(self, request, **kwargs):
+        ''' Override
+        '''
+        return super(SmallMoleculeResource, self).put_list(request, **kwargs) 
     
     def obj_create(self, bundle, **kwargs):
-        logger.info(str(('===creating smallmolecule', bundle.data)))
+        logger.info(str(('===creating smallmolecule'))) #, bundle.data)))
 
         return super(SmallMoleculeResource, self).obj_create(bundle, **kwargs)
 
@@ -65,6 +71,7 @@ class ReactionResource(ManagedModelResource):
         queryset = Reaction.objects.all() #.order_by('facility_id')
         authentication = MultiAuthentication(BasicAuthentication(), 
                                              SessionAuthentication())
+        always_return_data = True
         authorization= Authorization()        
         resource_name = 'reaction'
         

@@ -1,4 +1,4 @@
-# Django settings for lims project
+# Django settings for 1km project
 
 try:
     from settings import *
@@ -36,7 +36,7 @@ LOGGING = {
             'format': '%(levelname)s %(asctime)s %(module)s:%(lineno)d %(process)d %(thread)d %(message)s'
         },
         'simple': {
-            'format': '%(levelname)s %(asctime)s: %(pathname)s:%(lineno)d:%(levelname)s: %(message)s'
+            'format': '%(levelname)s %(msecs)s: %(name)s:%(funcName)s:%(lineno)d: %(message)s'
         },
     },
     'filters': {
@@ -48,7 +48,7 @@ LOGGING = {
         'logfile': {
             'level':'DEBUG',
             'class':'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(PROJECT_ROOT, '..') +  "/logs/iccbl-testing.log",
+            'filename': os.path.join(PROJECT_ROOT, '..') +  "/logs/1km-testing.log",
             'maxBytes': 5000000,
             'backupCount': 2,
             'formatter': 'simple',
@@ -66,7 +66,7 @@ LOGGING = {
             'propagate': False,
         },
         'db': {  # set a default handler
-            'handlers': ['logfile'],
+            'handlers': ['console'],
             'propagate': False,
             'level': 'INFO',
         },        
@@ -77,7 +77,7 @@ LOGGING = {
         },               
         'reports': {  # set a default handler
             'handlers': ['logfile'],
-            'propagate': False,
+            'propagate': True,
             'level': 'INFO',
         },
         'db.tests': {  # set a default handler
