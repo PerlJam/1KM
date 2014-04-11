@@ -1,6 +1,8 @@
 from __future__ import unicode_literals
 
 import logging
+import json
+
 from tastypie.utils import timezone
 from tastypie.exceptions import BadRequest
 from tastypie.utils.urls import trailing_slash
@@ -49,10 +51,70 @@ class SmallMoleculeResource(ManagedModelResource):
         # We don't want "schema" since that reserved word is used by tastypie 
         # for the schema definition for the resource (used by the UI)
         return [
+            url( (r"^(?P<resource_name>%s)/log/(?P<apilog>\d+)%s$" ) 
+                    % (self._meta.resource_name, trailing_slash()), 
+                self.wrap_view('dispatch_smallmolecule_apilog_view'), 
+                name="api_dispatch_smallmolecule_apilog_view"),
             url((r"^(?P<resource_name>%s)/(?P<sm_id>((?=(schema))__|(?!(schema))[^/]+))%s$"
                 )  % (self._meta.resource_name, trailing_slash()), 
-                self.wrap_view('dispatch_detail'), name="api_dispatch_detail"),]
+                self.wrap_view('dispatch_detail'), name="api_dispatch_detail"),
+                ]
+
+
  
+    def dispatch_smallmolecule_apilog_view(self, request, **kwargs):
+        
+        return self.dispatch('list', request, **kwargs)     
+
+    def obj_get_list(self, bundle, **kwargs):
+        
+        # TODO: this override is implemented as a convenience to access the 
+        # "batch" updated at one time.  Refactor so that the ApiLogResource
+        # can redirect to -any- resource
+        apilog_key = None
+        if 'apilog' in kwargs:
+            apilog_key = kwargs.pop('apilog')
+        
+        obj_query = super(SmallMoleculeResource, self).obj_get_list(bundle, **kwargs)
+        
+        if apilog_key:
+            apilog = ApiLog.objects.get(pk=apilog_key)
+            logger.info(str(('apilog found', apilog)))
+            
+            if apilog.api_action == 'PATCH_LIST' and apilog.added_keys:
+                keys = json.loads(apilog.added_keys)
+                logger.info(str(('query for keys', keys)))
+                # FIXME: on refactor; grab the key field from the resource definition
+                # FIXME: on refactor, will have to deal with composite keys
+                obj_query = obj_query.filter(sm_id__in=keys)
+        
+        return obj_query
+
+#  
+#     def patch_list(self, request, **kwargs):
+#         ''' Override
+#         '''
+#         # create an apilog batch
+#         listlog = self.listlog = ApiLog()
+#         listlog.username = request.user.username 
+#         listlog.user_id = request.user.id 
+#         listlog.date_time = timezone.now()
+#         listlog.ref_resource_name = self._meta.resource_name
+#         listlog.api_action = 'PATCH_LIST'
+#         listlog.uri = self.get_resource_uri()
+#         # TODO
+# #         if 'apilog_comment' in bundle.data:
+# #             listlog.comment = bundle.data['apilog_comment']
+#         
+#         
+#         response =  super(SmallMoleculeResource, self).patch_list(request, **kwargs) 
+#         
+#         listlog.save();
+#         listlog.key = listlog.id
+#         listlog.save()
+#         self.listlog = None
+# 
+#         return response
     
     def put_list(self, request, **kwargs):
         ''' Override
@@ -62,7 +124,12 @@ class SmallMoleculeResource(ManagedModelResource):
     def obj_create(self, bundle, **kwargs):
         logger.info(str(('===creating smallmolecule'))) #, bundle.data)))
 
-        return super(SmallMoleculeResource, self).obj_create(bundle, **kwargs)
+        bundle = super(SmallMoleculeResource, self).obj_create(bundle, **kwargs)
+        
+        logger.info(str(('kwargs', kwargs)))
+        
+        
+        return bundle
 
 
 class ReactionResource(ManagedModelResource):

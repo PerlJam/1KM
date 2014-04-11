@@ -33,16 +33,17 @@ DATABASES = {
     }
 }
 
-# Note that the SCREENSAVER_PGSQL variables can be found in the appropriate file at:
+# Note that the SCREENSAVER_PGSQL variables can be found in the appropriate 
+# file at:
 # /opt/apache/conf/auth/[server_address]
 # to access these variables from the commmand line, see "/setenv_and_run.sh"  
 _dbdefault = DATABASES['default']
 if 'SCREENSAVER_PGSQL_SERVER' in environ:
     # explicit db configuration for lincs site in environment variables
-    _dbdefault['NAME'] = environ['SCREENSAVER_PGSQL_DB']
-    _dbdefault['HOST'] = environ['SCREENSAVER_PGSQL_SERVER']
-    _dbdefault['USER'] = environ['SCREENSAVER_PGSQL_USER']
-    _dbdefault['PASSWORD'] = environ['SCREENSAVER_PGSQL_PASSWORD']
+    _dbdefault['NAME'] = environ['1KM_PGSQL_DB']
+    _dbdefault['HOST'] = environ['1KM_PGSQL_SERVER']
+    _dbdefault['USER'] = environ['1KM_PGSQL_USER']
+    _dbdefault['PASSWORD'] = environ['1KM_PGSQL_PASSWORD']
 
 
 
@@ -87,6 +88,11 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
+
+# uncomment to enable - this is the default, but we'll override 
+# AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',) 
+# our custom backend checks the user table, then authenticates with ECommons
+AUTHENTICATION_BACKENDS = ('reports.auth.CustomAuthenticationBackend',)  
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'x1gg450))screensaver2-lims2014001212045'

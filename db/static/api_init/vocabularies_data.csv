@@ -1,2 +1,2 @@
 key,scope,resource_uri,ordinal,comment,description,title
-human,protein.organism,/reports/api/v1/vocabularies/protein.organism/,1,,"Source organism for the protein",Organism
+human,protein.organism,/reports/api/v1/vocabularies/protein.organism/human/,1,,"Source organism for the protein",Organism
