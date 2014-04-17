@@ -58,16 +58,13 @@ define([
         view: 'home',
         submenus:{
           'smallmolecule': {
-            expanded: false,
             view: 'list'
           },
           'reaction': {
-            expanded: false,
             view: 'list'
           },
 
           'gene': {
-            expanded: false,
             view: 'list',
             submenus: {},
           },
@@ -88,7 +85,7 @@ define([
               'apilog':{
                   view: 'list',
               },
-              'users':{
+              'user':{
                   view: 'list',
               },
               'groups':{
@@ -210,6 +207,18 @@ define([
             api_resource: 'gene',
             url_root: '/db/api/v1',
             description: 'Genes'
+          },
+          
+          user: {
+            header_message: 'Users',
+            title: 'Users',
+            route: 'user',
+            list_view: 'ListView',
+            detailView: 'DetailView',
+            api_resource: 'user',
+            url_root: '/reports/api/v1',
+            description: 'Users'
+            
           }
       },
       list_defaults: {
@@ -415,7 +424,7 @@ define([
   appState.apiVersion = API_VERSION;
   appState.reportsApiUri = REPORTS_API_URI;
   appState.dbApiUri = DB_API_URI;
-  appState.LIST_ARGS = ['page','rpp','order','search'];      
+  appState.LIST_ARGS = ['page','rpp','order','search','log'];      
   
   
   return appState;

@@ -56,7 +56,11 @@ class SmallMolecule(models.Model):
     drugbank_id = models.CharField(max_length=15)
     
 class Gene(models.Model):
-    gene_id = models.CharField(max_length=8, unique=True)
+    
+    gene_id = models.CharField(
+        max_length=8, unique=True, 
+        default=create_id)
+    
     name = models.TextField()
     alternate_name = models.TextField()
     entrez_id = models.TextField()
@@ -64,8 +68,12 @@ class Gene(models.Model):
     
 
 class Reaction(models.Model):
+        
+    reaction_id = models.CharField(
+        max_length=8, unique=True, 
+        default=create_id)
+    
     name = models.TextField()
-    r_id = models.TextField(max_length=8, unique=True)
     chemical_equation = models.TextField()
     #substrate(s)
     #product(s)

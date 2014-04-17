@@ -4,7 +4,7 @@ import logging
 import json
 
 from tastypie.utils import timezone
-from tastypie.exceptions import BadRequest
+from tastypie.exceptions import BadRequest, Unauthorized
 from tastypie.utils.urls import trailing_slash
 from tastypie.authorization import Authorization
 from tastypie.authentication import BasicAuthentication, SessionAuthentication,\
@@ -25,14 +25,38 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
+class SuperUserAuthorization(Authorization):
+    
+    def delete_list(self, object_list, bundle):
+        if bundle.request.user.is_superuser:
+            return object_list
+        
+        # Sorry user, no deletes for you!
+        raise Unauthorized("Sorry, no deletes.")
+
+    def delete_detail(self, object_list, bundle):
+        if bundle.request.user.is_superuser:
+            return object_list
+        raise Unauthorized("Sorry, no deletes.")
+    
+    
+    
+    
 class SmallMoleculeResource(ManagedModelResource):
 
     class Meta:
         queryset = SmallMolecule.objects.all() #.order_by('facility_id')
         authentication = MultiAuthentication(BasicAuthentication(), 
                                              SessionAuthentication())
-        authorization= Authorization()        
+        authorization= SuperUserAuthorization()        
         resource_name = 'smallmolecule'
+        
+        # NOTE: in order to patch_list, wherein 'resource_uri' is not set, 
+        # the method 'put' is required.  TODO: figure out better allowed methods
+        allowed_methods = ['get', 'patch', 'delete', 'put']
+        list_allowed_methods = ['get','patch','put','delete']
+        
         always_return_data = True
         ordering = []
         filtering = {}
@@ -77,6 +101,7 @@ class SmallMoleculeResource(ManagedModelResource):
         
         obj_query = super(SmallMoleculeResource, self).obj_get_list(bundle, **kwargs)
         
+        # This is a hook to get items for the /log/log# uri
         if apilog_key:
             apilog = ApiLog.objects.get(pk=apilog_key)
             logger.info(str(('apilog found', apilog)))

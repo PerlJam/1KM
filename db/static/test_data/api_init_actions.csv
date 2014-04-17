@@ -1,0 +1,3 @@
+command,resource,file
+delete,smallmolecule,
+patch,smallmolecule,smallmolecules_unregistered1.csv
