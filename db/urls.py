@@ -12,7 +12,7 @@ v1_api.register(SmallMoleculeResource())
 v1_api.register(ReactionResource())
 
 urlpatterns = patterns('',
-    url(r'^$', views.main, name="home"),
+    url(r'^db/$', views.main, name="home"),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
 
@@ -24,7 +24,7 @@ urlpatterns = patterns('',
     (r'^accounts/login/$', 'django.contrib.auth.views.login', {'template_name': 'login.html'}),
     url(r'^accounts/logout/$', views.logout_page, name='logout'),
 
-    (r'^api/', include(v1_api.urls)),
+    (r'^db/api/', include(v1_api.urls)),
 
     url(r'^reports/', include('reports.urls')),
 )

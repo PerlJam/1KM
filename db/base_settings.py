@@ -1,4 +1,4 @@
-# Django settings for lims project
+# Django settings for 1km project
 
 import os
 import django.template
@@ -118,10 +118,10 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'lims.urls'
+ROOT_URLCONF = 'db.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'lims.wsgi.application'
+WSGI_APPLICATION = 'db.wsgi.application'
 
 TEMPLATE_DIRS = [os.path.join(PROJECT_ROOT, 'templates')]
 
