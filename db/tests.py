@@ -1,20 +1,20 @@
 """
 1KM unit tests
 """
-
-from django.test import TestCase
-from reports.tests import MetaHashResourceBootstrap
-from tastypie.test import ResourceTestCase, TestApiClient
-import os
-import logging
-from lims.tests import assert_obj1_to_obj2, find_all_obj_in_list, find_obj_in_list
 import json
 import factory
-import db.models
-import reports.tests
+import os
+import logging
 
+from django.test import TestCase
+from tastypie.test import ResourceTestCase, TestApiClient
+
+import reports.tests
+from reports.tests import MetaHashResourceBootstrap, assert_obj1_to_obj2, \
+        find_all_obj_in_list, find_obj_in_list
+import db.models
+from reports.serializers import CSVSerializer
 from test.factories import *
-from lims.api import CSVSerializer
 
 
 logger = logging.getLogger(__name__)
@@ -193,8 +193,8 @@ class SmallMoleculeTest(MetaHashResourceBootstrap,ResourceTestCase):
         
         logger.info(str((item)))
         resp = self.api_client.post(
-            resource_uri, format='json', data=item, 
-            authentication=self.get_credentials())
+            resource_uri, format='json', 
+            data=item,authentication=self.get_credentials())
         self.assertTrue(resp.status_code in [201], str((resp.status_code, resp)))
         
         # create a second smallmolecule
@@ -204,7 +204,7 @@ class SmallMoleculeTest(MetaHashResourceBootstrap,ResourceTestCase):
         resp = self.api_client.post(
             resource_uri, format='json', data=item, 
             authentication=self.get_credentials())
-        self.assertTrue(resp.status_code in [201], str((resp.status_code, resp)))
+        self.assertTrue(resp.status_code in [201], str((resp)))
         
         resp = self.api_client.get(
             resource_uri, format='json', authentication=self.get_credentials(), 

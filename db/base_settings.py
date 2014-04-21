@@ -150,7 +150,8 @@ TASTYPIE_ALLOW_MISSING_SLASH=True
 SOUTH_TESTS_MIGRATE = False
 
 # Default if "next" is not given as a request param
-LOGIN_REDIRECT_URL='/db'
+LOGIN_REDIRECT_URL='/db/'
+
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

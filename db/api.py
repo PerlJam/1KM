@@ -6,7 +6,7 @@ import json
 from tastypie.utils import timezone
 from tastypie.exceptions import BadRequest, Unauthorized
 from tastypie.utils.urls import trailing_slash
-from tastypie.authorization import Authorization
+from tastypie.authorization import Authorization, ReadOnlyAuthorization
 from tastypie.authentication import BasicAuthentication, SessionAuthentication,\
     MultiAuthentication
 from tastypie.constants import ALL_WITH_RELATIONS
@@ -15,9 +15,10 @@ from tastypie import fields
 from django.db import models
 from django.conf.urls import url
 
-from lims.api import CursorSerializer, LimsSerializer, SmallMoleculeSerializer
+from reports.serializers import CursorSerializer, LimsSerializer, SmallMoleculeSerializer
 from reports.models import MetaHash, Vocabularies, ApiLog
-from reports.api import ManagedModelResource, ManagedResource, ApiLogResource
+from reports.api import ManagedModelResource, ManagedResource, ApiLogResource, \
+        SuperUserAuthorization
 from db.models import SmallMolecule, Reaction
 
 
@@ -25,23 +26,6 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-
-class SuperUserAuthorization(Authorization):
-    
-    def delete_list(self, object_list, bundle):
-        if bundle.request.user.is_superuser:
-            return object_list
-        
-        # Sorry user, no deletes for you!
-        raise Unauthorized("Sorry, no deletes.")
-
-    def delete_detail(self, object_list, bundle):
-        if bundle.request.user.is_superuser:
-            return object_list
-        raise Unauthorized("Sorry, no deletes.")
-    
-    
-    
     
 class SmallMoleculeResource(ManagedModelResource):
 
@@ -54,8 +38,8 @@ class SmallMoleculeResource(ManagedModelResource):
         
         # NOTE: in order to patch_list, wherein 'resource_uri' is not set, 
         # the method 'put' is required.  TODO: figure out better allowed methods
-        allowed_methods = ['get', 'patch', 'delete', 'put']
-        list_allowed_methods = ['get','patch','put','delete']
+#         allowed_methods = ['get', 'patch', 'delete', 'put', 'post']
+#         list_allowed_methods = ['get','patch','put','delete']
         
         always_return_data = True
         ordering = []
@@ -164,7 +148,7 @@ class ReactionResource(ManagedModelResource):
         authentication = MultiAuthentication(BasicAuthentication(), 
                                              SessionAuthentication())
         always_return_data = True
-        authorization= Authorization()        
+        authorization= SuperUserAuthorization()        
         resource_name = 'reaction'
         
         ordering = []

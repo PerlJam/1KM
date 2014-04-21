@@ -1,17 +1,16 @@
 from __future__ import unicode_literals
+import logging
 
 from django.db import models
-from django.db.models.query import QuerySet
-from django.db.models.sql.query import Query
-from django.db.models.sql.compiler import SQLCompiler
-
-import logging
+# from django.db.models.query import QuerySet
+# from django.db.models.sql.query import Query
+# from django.db.models.sql.compiler import SQLCompiler
+from django.db import connection
 
 logger = logging.getLogger(__name__)
 
+from reports.utils.gray_codes import create_substance_id
 
-from lims.hms.gray_codes import create_substance_id
-from django.db import connection
 def create_id():
     # TODO: There is no way to pass an argument to
     # to the default on a model, so this is why we have to grope around for the
