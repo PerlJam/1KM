@@ -243,8 +243,11 @@ class ProteinResource(ManagedModelResource):
         '''
         bundle = super(ProteinResource, self).hydrate(bundle);
         
-        gene = Gene.objects.get(gene_id=bundle.data.get('gene_id'))
-        logger.info(str(('found ', gene)))
+        try:
+            gene = Gene.objects.get(gene_id=bundle.data.get('hms_gene_id'))
+        except Exception, e:
+           logger.warn(str(('could not find gene: ', bundle.data)))
+           raise e
         bundle.obj.gene = gene;
         
         return bundle
