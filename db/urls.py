@@ -3,13 +3,16 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
 from db import views
-from db.api import SmallMoleculeResource, ReactionResource
+from db.api import SmallMoleculeResource, ReactionResource, GeneResource, \
+        ProteinResource
 
 admin.autodiscover()
 
 v1_api = Api(api_name='v1')
 v1_api.register(SmallMoleculeResource())
 v1_api.register(ReactionResource())
+v1_api.register(GeneResource())
+v1_api.register(ProteinResource())
 
 urlpatterns = patterns('',
     url(r'^db/$', views.main, name="home"),

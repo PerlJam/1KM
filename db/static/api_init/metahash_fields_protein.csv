@@ -1,0 +1,5 @@
+key,scope,resource_uri,ordinal,comment,ui_type,filtering,description,title,ordering,json_field_type,vocabulary_scope_ref,visibility,alias,backgrid_cell_type,backgrid_cell_options,is_restricted
+protein_id,fields.protein,/reports/api/v1/metahash/fields.protein/protein_id/,1,,string,TRUE,"HMS Protein ID","HMS Protein ID",TRUE,,,"[list,detail]",,Iccbl.EditCell,,
+uniprot_id,fields.protein,/reports/api/v1/metahash/fields.protein/uniprot_id/,2,,string,TRUE,"Uniprot Accesssion ID","Uniprot ID",TRUE,,,"[list,detail]",,,,
+amino_acid_sequence,fields.protein,/reports/api/v1/metahash/fields.protein/amino_acid_sequence/,3,,string,TRUE,"The amino acid sequence of the protein; this will be UNIQUE for each protein associated with a specific Protein ID.","Amino Acid Sequence",TRUE,,,"[list,detail]",,,,
+hms_gene_id,fields.protein,/reports/api/v1/metahash/fields.protein/hms_gene_id/,4,,string,TRUE,"The HMS Gene ID associated with this protein","HMS Gene ID",TRUE,,,"[list,detail]",,Iccbl.LinkCell,/gene/{hms_gene_id},

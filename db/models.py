@@ -22,7 +22,8 @@ def create_id():
         val = row[0]
     
         new_id = create_substance_id(val)
-        logger.info(str(('created_id', val, new_id)))
+        if(logger.isEnabledFor(logging.DEBUG)):
+            logger.debug(str(('created_id', val, new_id)))
     #     if val > 1:
     #         cursor.execute("SELECT setval('db_substance_id_seq', %s)", [val-1])
         return new_id
@@ -64,7 +65,17 @@ class Gene(models.Model):
     alternate_name = models.TextField()
     entrez_id = models.TextField()
     entrez_symbol = models.TextField()
+    sequence = models.TextField()
+        
+class Protein(models.Model):
     
+    protein_id = models.CharField(
+        max_length=8, unique=True, 
+        default=create_id)
+    
+    uniprot_id = models.CharField(max_length=15)
+    amino_acid_sequence = models.TextField()
+    gene = models.ForeignKey('Gene')
 
 class Reaction(models.Model):
         

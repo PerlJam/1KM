@@ -68,6 +68,10 @@ define([
             view: 'list',
             submenus: {},
           },
+          'protein': {
+            view: 'list',
+            submenus: {},
+          },
           'admin': {
             expanded: false,
             // TODO: menu view not implemented; would show children menu items as links in the page
@@ -207,6 +211,16 @@ define([
             api_resource: 'gene',
             url_root: '/db/api/v1',
             description: 'Genes'
+          },
+          protein: {
+            header_message: 'Proteins',
+            title: 'Proteins',
+            route: 'protein',
+            list_view: 'ListView',
+            detailView: 'DetailView',
+            api_resource: 'protein',
+            url_root: '/db/api/v1',
+            description: 'Proteins'
           },
           
           user: {

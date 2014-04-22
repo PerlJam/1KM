@@ -1,0 +1,5 @@
+key,scope,resource_uri,ordinal,comment,ui_type,filtering,description,title,ordering,json_field_type,vocabulary_scope_ref,visibility,alias,backgrid_cell_type,backgrid_cell_options,is_restricted
+gene_id,fields.gene,/reports/api/v1/metahash/fields.gene/gene_id/,1,,string,TRUE,"HMS Gene ID","HMS Gene ID",TRUE,,,"[list,detail]",,Iccbl.EditCell,,
+name,fields.gene,/reports/api/v1/metahash/fields.gene/name/,2,,string,TRUE,Name,Name,TRUE,,,"[list,detail]",,,,
+alternate_name,fields.gene,/reports/api/v1/metahash/fields.gene/alternate_name/,4,,string,TRUE,"Alternate Name","Alternate Name",TRUE,,,"[list,detail]",,,,
+sequence,fields.gene,/reports/api/v1/metahash/fields.gene/sequence/,5,,string,TRUE,Sequence,Sequence,TRUE,,,"[list,detail]",,,,
