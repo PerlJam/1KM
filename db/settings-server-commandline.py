@@ -1,4 +1,8 @@
-# Django settings for 1km project
+# overlay settings for running scripts from the command line on the server
+# set's up a different log file so that the server logs aren't overwritten, 
+# and don't get the permissions changed.
+
+from os import environ
 
 try:
     from settings import *
@@ -8,26 +12,16 @@ except ImportError:
     settings.py for this site.'''
     del sys
     
-import os.path
+_dbdefault = DATABASES['default']
+if 'ONE1KM_PGSQL_SERVER' in environ:
+    # explicit db configuration for lincs site in environment variables
+    _dbdefault['NAME'] = environ['ONE1KM_PGSQL_DB']
+    _dbdefault['HOST'] = environ['ONE1KM_PGSQL_SERVER']
+    _dbdefault['USER'] = environ['ONE1KM_PGSQL_USER']
+    _dbdefault['PASSWORD'] = environ['ONE1KM_PGSQL_PASSWORD']
 
 
-print 'PROJECT_ROOT: ', PROJECT_ROOT, ', ' , os.path.join(PROJECT_ROOT, '..')
-
-
-# make tests faster
-# use from the command line with testing like
-# ./manage.py test --settings=lims.testing-settings
-SOUTH_TESTS_MIGRATE = False
-
-# FIXME: sqllite3 db does not work - errors on "DISTINCT ON" clause
-# DATABASES['default'] = {'ENGINE': 'django.db.backends.sqlite3',
-#                         'NAME': ':memory'}
-
-# A sample logging configuration. The only tangible logging
-# performed by this configuration is to send an email to
-# the site admins on every HTTP 500 error when DEBUG=False.
-# See http://docs.djangoproject.com/en/dev/topics/logging for
-# more details on how to customize your logging configuration.
+    
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -36,7 +30,7 @@ LOGGING = {
             'format': '%(levelname)s %(asctime)s %(module)s:%(lineno)d %(process)d %(thread)d %(message)s'
         },
         'simple': {
-            'format': '%(levelname)s %(msecs)s: %(name)s:%(funcName)s:%(lineno)d: %(message)s'
+            'format': '%(levelname)s %(asctime)s: %(pathname)s:%(lineno)d:%(levelname)s: %(message)s'
         },
     },
     'filters': {
@@ -48,7 +42,8 @@ LOGGING = {
         'logfile': {
             'level':'DEBUG',
             'class':'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(PROJECT_ROOT, '..') +  "/logs/1km-testing.log",
+#            'filename': os.path.join(PROJECT_ROOT, '..') +  "/logs/1km-cli.log",
+            'filename': "/www/dev.1km.hms.harvard.edu/support/logs/1km-cli.log",
             'maxBytes': 5000000,
             'backupCount': 2,
             'formatter': 'simple',
@@ -66,18 +61,18 @@ LOGGING = {
             'propagate': False,
         },
         'db': {  # set a default handler
-            'handlers': ['console'],
+            'handlers': ['logfile'],
             'propagate': False,
             'level': 'INFO',
         },        
         'lims': {  # set a default handler
-            'handlers': ['console'],
+            'handlers': ['logfile'],
             'propagate': False,
             'level': 'INFO',
         },               
         'reports': {  # set a default handler
             'handlers': ['logfile'],
-            'propagate': True,
+            'propagate': False,
             'level': 'INFO',
         },
         'db.tests': {  # set a default handler
@@ -98,7 +93,7 @@ LOGGING = {
         'django': {  # set a default handler
             'handlers': ['logfile'],
             'propagate': False,
-            'level': 'DEBUG',
+            'level': 'INFO',
         },        
         'utils': {  # for SQL
             'handlers': ['logfile'],
@@ -112,3 +107,4 @@ LOGGING = {
         },        
     }
 }
+

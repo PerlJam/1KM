@@ -13,6 +13,7 @@ require.config({
     backbone_modelbinder: 'libs/Backbone.ModelBinder',
     backbone_forms: 'libs/backbone-forms', // TODO: evaluating vs. backbone.stickit
     layoutmanager: 'libs/backbone.layoutmanager',
+    elementTransitions: 'libs/elementTransitions',
     bootstrap: 'libs/bootstrap',
     lunr: 'libs/lunr',
     text: 'libs/text',

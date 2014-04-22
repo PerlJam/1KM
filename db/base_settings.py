@@ -1,4 +1,4 @@
-# Django settings for lims project
+# Django settings for 1km project
 
 import os
 import django.template
@@ -6,10 +6,10 @@ import django.template
 # Force the new url syntax 
 django.template.add_to_builtins('django.templatetags.future')
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
-DEBUG = True
-TEMPLATE_DEBUG = DEBUG
+# DEBUG = True
+# TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
     ('Site Admin', 'site_admin@email.com'),
@@ -20,7 +20,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': os.path.join(BASE_DIR, 'project.db'),                      # Or path to database file if using sqlite3.
+        'NAME': os.path.join(PROJECT_ROOT, 'project.db'),                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
         'USER': '',
         'PASSWORD': '',
@@ -118,12 +118,12 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'lims.urls'
+ROOT_URLCONF = 'db.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'lims.wsgi.application'
+# WSGI_APPLICATION = 'db.wsgi.application'
 
-TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
+TEMPLATE_DIRS = [os.path.join(PROJECT_ROOT, 'templates')]
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -150,7 +150,8 @@ TASTYPIE_ALLOW_MISSING_SLASH=True
 SOUTH_TESTS_MIGRATE = False
 
 # Default if "next" is not given as a request param
-LOGIN_REDIRECT_URL='/db'
+LOGIN_REDIRECT_URL='/db/'
+
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

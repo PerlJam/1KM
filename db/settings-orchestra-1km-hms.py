@@ -1,4 +1,4 @@
-# Django settings for lims project on the HMS Orchestra system
+# Django settings for 1km project on the HMS Orchestra system
 # Copy this file to settings.py and change local values for your installation
 
 from os import environ
@@ -21,30 +21,21 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+# Note that the SCREENSAVER_PGSQL variables can be found in the appropriate 
+# file at:
+# /opt/apache/conf/auth/[server_address]
+# to access these variables from the commmand line, see "/setenv_and_run.sh"  
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2', 
-        'NAME': 'dev1km', 
-        'USER': 'dev1kmweb',
-        'PASSWORD': '',
-        'HOST': 'dev.pgsql.orchestra:',
+        'NAME': environ['ONEKM_PGSQL_DB'], 
+        'USER': environ['ONEKM_PGSQL_USER'],
+        'PASSWORD': environ['ONEKM_PGSQL_PASSWORD'],
+        'HOST': environ['ONEKM_PGSQL_SERVER'],
         'PORT': '',                      # Set to empty string for default.
     }
 }
-
-# Note that the SCREENSAVER_PGSQL variables can be found in the appropriate file at:
-# /opt/apache/conf/auth/[server_address]
-# to access these variables from the commmand line, see "/setenv_and_run.sh"  
-_dbdefault = DATABASES['default']
-if 'SCREENSAVER_PGSQL_SERVER' in environ:
-    # explicit db configuration for lincs site in environment variables
-    _dbdefault['NAME'] = environ['SCREENSAVER_PGSQL_DB']
-    _dbdefault['HOST'] = environ['SCREENSAVER_PGSQL_SERVER']
-    _dbdefault['USER'] = environ['SCREENSAVER_PGSQL_USER']
-    _dbdefault['PASSWORD'] = environ['SCREENSAVER_PGSQL_PASSWORD']
-
-
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
@@ -67,7 +58,7 @@ SITE_ID = 1
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, '..', '..', '..', 'docroot', '_static')
+STATIC_ROOT = os.path.join(PROJECT_ROOT, '..', '..', '..', 'docroot', '_static')
 
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
@@ -88,8 +79,13 @@ STATICFILES_FINDERS = (
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
+# uncomment to enable - this is the default, but we'll override 
+# AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',) 
+# our custom backend checks the user table, then authenticates with ECommons
+AUTHENTICATION_BACKENDS = ('reports.auth.CustomAuthenticationBackend',)  
+
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = 'x1gg450))screensaver2-lims2014001212045'
+SECRET_KEY = 'x1gg450))1km-dev2014001212045'
 
 LOGGING = {
     'version': 1,

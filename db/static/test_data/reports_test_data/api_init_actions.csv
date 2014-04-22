@@ -1,0 +1,3 @@
+command,resource,file
+delete,user,
+patch,user,1km_users.csv

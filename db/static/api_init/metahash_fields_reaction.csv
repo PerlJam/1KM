@@ -1,4 +1,4 @@
 key,scope,resource_uri,ordinal,comment,ui_type,filtering,description,title,ordering,json_field_type,vocabulary_scope_ref,visibility,alias,backgrid_cell_type,backgrid_cell_options,is_restricted
-r_id,fields.reaction,/reports/api/v1/metahash/fields.reaction/r_id/,1,,string,TRUE,"HMS Reaction ID","HMS Reaction ID",TRUE,,,"[list,detail]",,Iccbl.EditCell,,
+reaction_id,fields.reaction,/reports/api/v1/metahash/fields.reaction/reaction_id/,1,,string,TRUE,"HMS Reaction ID","HMS Reaction ID",TRUE,,,"[list,detail]",,Iccbl.EditCell,,
 name,fields.reaction,/reports/api/v1/metahash/fields.reaction/name/,2,,string,TRUE,Name,Name,TRUE,,,"[list,detail]",,,,
 chemical_equation,fields.reaction,/reports/api/v1/metahash/fields.reaction/chemical_equation/,4,,string,TRUE,"Chemical Equation","Chemical Equation",TRUE,,,"[list,detail]",,,,

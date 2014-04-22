@@ -58,16 +58,17 @@ define([
         view: 'home',
         submenus:{
           'smallmolecule': {
-            expanded: false,
             view: 'list'
           },
           'reaction': {
-            expanded: false,
             view: 'list'
           },
 
           'gene': {
-            expanded: false,
+            view: 'list',
+            submenus: {},
+          },
+          'protein': {
             view: 'list',
             submenus: {},
           },
@@ -88,7 +89,7 @@ define([
               'apilog':{
                   view: 'list',
               },
-              'users':{
+              'user':{
                   view: 'list',
               },
               'groups':{
@@ -96,6 +97,9 @@ define([
               },
               'permissions':{
                   view: 'list',
+              },
+              'jobs':{
+                view: 'list'
               }
             }
           }
@@ -119,7 +123,20 @@ define([
               content_header: 'Welcome',
               description: 'Menu starting point'
           },
-
+          
+          jobs: {
+            header_message: 'User Jobs',
+            title: 'Jobs',
+            route: 'jobs',
+            listView: 'JobsView',
+            detailView: 'JobView',
+            api_resource: 'jobs',
+            url_root: '/reports/api/v1',
+            options: { },
+            description: 'Jobs'
+            
+          },
+          
           metahash: {
               header_message: 'Define fields for display on detail and list views',
               title: 'Field Information',
@@ -194,6 +211,28 @@ define([
             api_resource: 'gene',
             url_root: '/db/api/v1',
             description: 'Genes'
+          },
+          protein: {
+            header_message: 'Proteins',
+            title: 'Proteins',
+            route: 'protein',
+            list_view: 'ListView',
+            detailView: 'DetailView',
+            api_resource: 'protein',
+            url_root: '/db/api/v1',
+            description: 'Proteins'
+          },
+          
+          user: {
+            header_message: 'Users',
+            title: 'Users',
+            route: 'user',
+            list_view: 'ListView',
+            detailView: 'DetailView',
+            api_resource: 'user',
+            url_root: '/reports/api/v1',
+            description: 'Users'
+            
           }
       },
       list_defaults: {
@@ -399,7 +438,7 @@ define([
   appState.apiVersion = API_VERSION;
   appState.reportsApiUri = REPORTS_API_URI;
   appState.dbApiUri = DB_API_URI;
-  appState.LIST_ARGS = ['page','rpp','order','search'];      
+  appState.LIST_ARGS = ['page','rpp','order','search','log'];      
   
   
   return appState;

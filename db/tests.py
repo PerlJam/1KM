@@ -1,20 +1,20 @@
 """
 1KM unit tests
 """
-
-from django.test import TestCase
-from reports.tests import MetaHashResourceBootstrap
-from tastypie.test import ResourceTestCase, TestApiClient
-import os
-import logging
-from lims.tests import assert_obj1_to_obj2, find_all_obj_in_list, find_obj_in_list
 import json
 import factory
-import db.models
-import reports.tests
+import os
+import logging
 
+from django.test import TestCase
+from tastypie.test import ResourceTestCase, TestApiClient
+
+import reports.tests
+from reports.tests import MetaHashResourceBootstrap, assert_obj1_to_obj2, \
+        find_all_obj_in_list, find_obj_in_list
+import db.models
+from reports.serializers import CSVSerializer
 from test.factories import *
-from lims.api import CSVSerializer
 
 
 logger = logging.getLogger(__name__)
@@ -31,6 +31,7 @@ BASE_URI_DB = '/db/api/v1'
 
 
 class TestApiInit(reports.tests.TestApiInit):
+    # FIXME: factor out test_2api_init
     
     def setUp(self):
         super(TestApiInit, self).setUp()
@@ -184,7 +185,7 @@ class SmallMoleculeTest(MetaHashResourceBootstrap,ResourceTestCase):
         
 
     def test1_create_smallmolecule(self):
-        logger.info(str(('==== test1_create_library =====')))
+        logger.info(str(('==== test1_create_smallmolecule =====')))
         
         resource_uri = BASE_URI_DB + '/smallmolecule'
         
@@ -192,8 +193,8 @@ class SmallMoleculeTest(MetaHashResourceBootstrap,ResourceTestCase):
         
         logger.info(str((item)))
         resp = self.api_client.post(
-            resource_uri, format='json', data=item, 
-            authentication=self.get_credentials())
+            resource_uri, format='json', 
+            data=item,authentication=self.get_credentials())
         self.assertTrue(resp.status_code in [201], str((resp.status_code, resp)))
         
         # create a second smallmolecule
@@ -203,7 +204,7 @@ class SmallMoleculeTest(MetaHashResourceBootstrap,ResourceTestCase):
         resp = self.api_client.post(
             resource_uri, format='json', data=item, 
             authentication=self.get_credentials())
-        self.assertTrue(resp.status_code in [201], str((resp.status_code, resp)))
+        self.assertTrue(resp.status_code in [201], str((resp)))
         
         resp = self.api_client.get(
             resource_uri, format='json', authentication=self.get_credentials(), 
@@ -219,3 +220,45 @@ class SmallMoleculeTest(MetaHashResourceBootstrap,ResourceTestCase):
                          item, new_obj['objects'])))
         logger.info(str(('item found', obj)))
 
+    def test2_create_register(self):
+
+        logger.info(str(('==== test2_create_register =====')))
+        
+        resource_uri = BASE_URI_DB + '/smallmolecule'
+        
+        item = SmallMoleculeFactory.attributes()
+        
+        item['sm_id'] = None
+        
+        logger.info(str(('item to post', item)))
+        resp = self.api_client.post(
+            resource_uri, format='json', data=item, 
+            authentication=self.get_credentials())
+        self.assertTrue(resp.status_code in [201], str((resp.status_code, resp)))
+        
+        # create a second smallmolecule
+        item = SmallMoleculeFactory.attributes()
+        item['sm_id'] = None
+        
+        logger.info(str(('item to post', item)))
+        resp = self.api_client.post(
+            resource_uri, format='json', data=item, 
+            authentication=self.get_credentials())
+        self.assertTrue(resp.status_code in [201], str((resp.status_code, resp)))
+        
+        resp = self.api_client.get(
+            resource_uri, format='json', authentication=self.get_credentials(), 
+            data={ 'limit': 999 })
+        logger.info(str(('--------resp to get:', resp.status_code)))
+        new_obj = self.deserialize(resp)
+        self.assertValidJSONResponse(resp)
+        self.assertEqual(len(new_obj['objects']), 2, str((new_obj)))
+
+        result, obj = find_obj_in_list(item, new_obj['objects'],
+                                       excludes=['sm_id'] )
+        self.assertTrue(
+            result, str(('bootstrap item not found', obj, 
+                         item, new_obj['objects'])))
+        logger.info(str(('item found', obj)))
+        self.assertTrue(not obj['sm_id']==None, 
+                        str(('obj returned has no sm_id', obj)))
