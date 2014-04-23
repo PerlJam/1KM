@@ -248,7 +248,7 @@ class ProteinResource(ManagedModelResource):
             gene = Gene.objects.get(gene_id=bundle.data.get('hms_gene_id'))
         except Exception, e:
            logger.warn(str(('could not find gene: ', bundle.data)))
-           raise e
+           raise type(e),str(('could not find gene: ', bundle.data))
         bundle.obj.gene = gene;
         
         return bundle
