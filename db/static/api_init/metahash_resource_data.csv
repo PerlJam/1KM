@@ -3,3 +3,4 @@ smallmolecule,resource,[sm_id],[name],/reports/api/v1/resource/smallmolecule/,0,
 reaction,resource,[reaction_id],[name],/reports/api/v1/resource/reaction/,0,,"A reaction entry",Reaction,"[list,detail]",,,db
 gene,resource,[gene_id],[gene_id],/reports/api/v1/resource/gene/,0,,"Gene information",Gene,"[list,detail]",,,db
 protein,resource,[protein_id],[uniprot_id],/reports/api/v1/resource/protein/,0,,"Protein and Enzyme Information--relating to cannonical proteins",Protein,"[list,detail]",,,db
+expressionhost,resource,[host_id],"[name,genotype]",/reports/api/v1/resource/expressionhost/,0,,"Expression host information","Expression Host","[list,detail]",,,db

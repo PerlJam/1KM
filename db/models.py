@@ -90,11 +90,24 @@ class Reaction(models.Model):
     directionality = models.TextField()
     #enzyme(s)
     #subsystem(s)
-    confidence_score = models.TextField()
-    kegg_id = models.TextField()
-    ec_number = models.TextField()
-    alternate_name = models.TextField()
-    reference = models.TextField()
-    comment = models.TextField()
+    confidence_score = models.TextField(blank=True)
+    kegg_id = models.TextField(blank=True)
+    ec_number = models.TextField(blank=True)
+    alternate_name = models.TextField(blank=True)
+    reference = models.TextField(blank=True)
+    comment = models.TextField(blank=True)
 
+class ExpressionHost(models.Model):
+    host_id = models.CharField(
+        max_length=8, unique=True, 
+        default=create_id)
+
+    name = models.TextField()
+    taxonomic_id = models.TextField()
+    taxonomic_branch = models.TextField()
+    genotype = models.CharField(max_length=32)
+    genome = models.TextField()
+    expression_data = models.TextField(blank=True)
+    metabolic_model = models.TextField(blank=True)
+    reference = models.IntegerField(null=True, blank=True)
     

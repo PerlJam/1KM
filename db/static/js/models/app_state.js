@@ -72,6 +72,10 @@ define([
             view: 'list',
             submenus: {},
           },
+          'expressionhost': {
+            view: 'list',
+            submenus: {},
+          },
           'admin': {
             expanded: false,
             // TODO: menu view not implemented; would show children menu items as links in the page
@@ -221,6 +225,17 @@ define([
             api_resource: 'protein',
             url_root: '/db/api/v1',
             description: 'Proteins'
+          },
+          
+          expressionhost: {
+            header_message: 'Expression Hosts',
+            title: 'Expression Hosts',
+            route: 'expressionhost',
+            list_view: 'ListView',
+            detailView: 'DetailView',
+            api_resource: 'expressionhost',
+            url_root: '/db/api/v1',
+            description: 'Expression Hosts'
           },
           
           user: {
