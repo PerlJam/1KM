@@ -72,6 +72,14 @@ define([
             view: 'list',
             submenus: {},
           },
+          'expressionhost': {
+            view: 'list',
+            submenus: {},
+          },
+//          'about': {
+//            view: 'list',
+//            submenus: {},
+//          },
           'admin': {
             expanded: false,
             // TODO: menu view not implemented; would show children menu items as links in the page
@@ -117,13 +125,19 @@ define([
               description: 'Perform admin activities'
           },
           home: {
-              title: 'Home',
-              route: '/',
-              view: 'HomeView',
-              content_header: 'Welcome',
-              description: 'Menu starting point'
+            title: 'Home',
+            route: '/',
+            view: 'HomeView',
+            content_header: 'Welcome',
+            description: 'Menu starting point'
           },
-          
+//          about: {
+//            title: 'About',
+//            route: 'about',
+//            view: 'HomeView',
+//            content_header: 'About',
+//            description: 'About the 1000 Molecules project'
+//          },
           jobs: {
             header_message: 'User Jobs',
             title: 'Jobs',
@@ -221,6 +235,17 @@ define([
             api_resource: 'protein',
             url_root: '/db/api/v1',
             description: 'Proteins'
+          },
+          
+          expressionhost: {
+            header_message: 'Expression Hosts',
+            title: 'Expression Hosts',
+            route: 'expressionhost',
+            list_view: 'ListView',
+            detailView: 'DetailView',
+            api_resource: 'expressionhost',
+            url_root: '/db/api/v1',
+            description: 'Expression Hosts'
           },
           
           user: {

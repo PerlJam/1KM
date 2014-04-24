@@ -15,11 +15,12 @@ from tastypie import fields
 from django.db import models
 from django.conf.urls import url
 
-from reports.serializers import CursorSerializer, LimsSerializer, SmallMoleculeSerializer
+from reports.serializers import CursorSerializer, LimsSerializer, \
+        SmallMoleculeSerializer, TextIntegerField
 from reports.models import MetaHash, Vocabularies, ApiLog
 from reports.api import ManagedModelResource, ManagedResource, ApiLogResource, \
         SuperUserAuthorization
-from db.models import SmallMolecule, Reaction, Gene, Protein
+from db.models import SmallMolecule, Reaction, Gene, Protein, ExpressionHost
 
 
 import logging
@@ -247,10 +248,80 @@ class ProteinResource(ManagedModelResource):
             gene = Gene.objects.get(gene_id=bundle.data.get('hms_gene_id'))
         except Exception, e:
            logger.warn(str(('could not find gene: ', bundle.data)))
-           raise e
+           raise type(e),str(('could not find gene: ', bundle.data))
         bundle.obj.gene = gene;
         
         return bundle
+
+   
+class ExpressionHostResource(ManagedModelResource):
+    
+    reference = TextIntegerField('reference', null=True, blank=True)
+    class Meta:
+        queryset = ExpressionHost.objects.all()
+        authentication = MultiAuthentication(BasicAuthentication(), 
+                                             SessionAuthentication())
+        authorization= SuperUserAuthorization()        
+        resource_name = 'expressionhost'
+        
+        always_return_data = True
+        ordering = []
+        filtering = {}
+        serializer = LimsSerializer()
+
+    def __init__(self, **kwargs):
+        super(ExpressionHostResource,self).__init__(**kwargs)
+
+    def prepend_urls(self):
+        # TODO: create a custom mapper for schema before others to avoid 
+        # complicated regex
+        return [
+            url( (r"^(?P<resource_name>%s)/log/(?P<apilog>\d+)%s$" ) 
+                    % (self._meta.resource_name, trailing_slash()), 
+                self.wrap_view('dispatch_expressionhost_apilog_view'), 
+                name="api_dispatch_expressionhost_apilog_view"),
+            url((r"^(?P<resource_name>%s)/(?P<host_id>((?=(schema))__|(?!(schema))[^/]+))%s$"
+                )  % (self._meta.resource_name, trailing_slash()), 
+                self.wrap_view('dispatch_detail'), name="api_dispatch_detail"),
+                ]
+
+    def dispatch_expressionhost_apilog_view(self, request, **kwargs):
+        return self.dispatch('list', request, **kwargs)     
+
+    def obj_get_list(self, bundle, **kwargs):
+        
+        # TODO: this override is implemented as a convenience to access the 
+        # "batch" updated at one time.  Refactor so that the ApiLogResource
+        # can redirect to -any- resource
+        apilog_key = None
+        if 'apilog' in kwargs:
+            apilog_key = kwargs.pop('apilog')
+        
+        obj_query = super(ExpressionHostResource, self).obj_get_list(bundle, **kwargs)
+        
+        # This is a hook to get items for the /log/log# uri
+        if apilog_key:
+            apilog = ApiLog.objects.get(pk=apilog_key)
+            logger.info(str(('apilog found', apilog)))
+            
+            if apilog.api_action == 'PATCH_LIST' and apilog.added_keys:
+                keys = json.loads(apilog.added_keys)
+                logger.info(str(('query for keys', keys)))
+                # FIXME: on refactor; grab the key field from the resource definition
+                # FIXME: on refactor, will have to deal with composite keys
+                obj_query = obj_query.filter(host_id__in=keys)
+        
+        return obj_query
+    
+    def put_list(self, request, **kwargs):
+        return super(ExpressionHostResource, self).put_list(request, **kwargs) 
+    
+    def obj_create(self, bundle, **kwargs):
+        bundle = super(ExpressionHostResource, self).obj_create(bundle, **kwargs)
+        return bundle
+    
+
+
 
 class ReactionResource(ManagedModelResource):
 

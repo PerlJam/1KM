@@ -122,7 +122,7 @@ function($, _, Backbone, Iccbl, appModel, AppView, AppRouter ) {
           return memo ;
         }, ' ');              
     
-      document.title = route + ':' + title;
+      document.title = '1KM' + ':' + title;
    }, this);    
  
 });

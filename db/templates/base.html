@@ -84,10 +84,10 @@ html,body {
 					</button>
 					<a class="brand" href="#">HMS 1000 Molecules DB</a>
 					<div class="nav-collapse collapse">
-						<ul class="nav">
-							<li class="active"><a href="#">Home</a></li>
-							<li><a href="#about">About</a></li>
-							<li><a href="#contact">Contact</a></li>
+						<ul class="topnav nav">
+							<li id='home' class="active"><a href="#">Home</a></li>
+							<li id='about'><a href="#about">About</a></li>
+							<li id='contact'><a href="#contact">Contact</a></li>
 						</ul>
 						<div class="navbar-text pull-right" id=loginmsg>
 							{% if user.is_authenticated %} logged in as: {{ user }} <a
@@ -114,11 +114,6 @@ html,body {
 		</div>
 	</div>
 
-
-	<!-- Le javascript
-    ================================================== -->
-	<!-- Placed at the end of the document so the pages load faster
-	<script src="{{ STATIC_URL }}js/bootstrap.js"></script> -->
 
 </body>
 

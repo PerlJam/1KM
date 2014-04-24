@@ -4,3 +4,4 @@ patch,vocabularies,vocabularies_data.csv
 patch,metahash,metahash_fields_smallmolecule.csv
 patch,metahash,metahash_fields_gene.csv
 patch,metahash,metahash_fields_protein.csv
+patch,metahash,metahash_fields_expression_host.csv

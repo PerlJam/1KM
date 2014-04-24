@@ -4,7 +4,7 @@ from django.contrib import admin
 
 from db import views
 from db.api import SmallMoleculeResource, ReactionResource, GeneResource, \
-        ProteinResource
+        ProteinResource, ExpressionHostResource
 
 admin.autodiscover()
 
@@ -13,6 +13,7 @@ v1_api.register(SmallMoleculeResource())
 v1_api.register(ReactionResource())
 v1_api.register(GeneResource())
 v1_api.register(ProteinResource())
+v1_api.register(ExpressionHostResource())
 
 urlpatterns = patterns('',
     url(r'^db/$', views.main, name="home"),
