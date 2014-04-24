@@ -10,13 +10,12 @@
 	href="{{ STATIC_URL }}css/basic_tabs.css" />
 
 <style type="text/css">
+/** FIXME: move all styles to the stylesheets **/
 @media screen {
 	.table th,.table td {
 		padding: 1px;
 	}
-	.row-fluid .span2 {
-		width: 10%;
-	}
+
 	.nav {
 		margin-bottom: 0px;
 	}
@@ -57,9 +56,6 @@
 	margin: 20px 0;
 }
 
-.no-space [class*="span"] {
-	margin-left: 5px;
-}
 </style>
 <title>HMS 1000 Molecules</title>
 
@@ -68,7 +64,7 @@
 
 {% endblock %} {% block application%}
 <div class="container-fluid">
-	<div id="application_div" class="row-fluid no-space"></div>
+	<div id="application_div" class="row-fluid one-space"></div>
 </div>
 <!--/.fluid-container-->
 {% endblock %}
