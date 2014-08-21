@@ -1062,3 +1062,79 @@ def scan_atoms(t, s, p):
         else:
             return 'proceed'
 
+def prediction_algorithm(target_smiles, df):
+
+    start = timeit.default_timer()
+    TestUni = df
+    chol = str(target_smiles)
+    tally = []
+    for z in range(len(TestUni)):
+        try:
+            t = Chem.MolFromSmiles( chol ) 
+            s = Chem.MolFromSmiles( TestUni['Substrates'].irow(z) )
+            p = Chem.MolFromSmiles( TestUni['Products'].irow(z) )
+            tally.append( scan_atoms(t, s, p) )
+            if z % 10 == 0:
+                    print z  
+        except:
+            tally.append( 'do not proceed' )
+            
+    TestUni['Anabolic Compatible'] = tally 
+    TestUni2 = TestUni[TestUni['Anabolic Compatible'] == 'proceed']
+    print "Potential hits..."
+    print len(TestUni2)
+
+    anabolic = chol
+    substrates = []
+    products = []
+    targets = []
+    results = []
+    enzymes = []
+    for x in range(len(TestUni2)):
+        try:
+            results.append( explore_substrate(anabolic, x, TestUni2) )
+            substrates.append( TestUni2['Substrates'].irow(x) )
+            products.append( TestUni2['Products'].irow(x) )
+            targets.append( anabolic )
+            enzymes.append( TestUni2['Enzymes'].irow(x) )
+        except:
+            pass
+        
+    stop = timeit.default_timer()
+    #unique_prods, unique_substrates, unique_products, unique_enzymes = filter_results(results, substrates, products, TestUni, enzymes)
+    unique_prods, unique_substrates, unique_products, unique_enzymes = results, substrates, products, enzymes
+    
+    print "Finished reactions... searching hits on PubChem... "
+    
+    #search pubchem for unique hits
+    novel_compounds = []
+    for i in unique_prods:
+        searches = pcp.get_compounds('CanonicalSMILES', str(Chem.MolToSmiles(i)), 'smiles')
+        if str(searches) == '[Compound()]':
+            novel_compounds.append( i )
+            
+    #put things in a df
+    unique_prods_smiles = []
+    novel_smiles = []
+    for i in unique_prods:
+        unique_prods_smiles.append( Chem.MolToSmiles(i) )
+    for i in novel_compounds:
+        novel_smiles.append( Chem.MolToSmiles(i) )
+    
+    novels =[ ]
+    for i in unique_prods_smiles:
+        if i in novel_smiles:
+            novels.append( 'Novel' )
+        else:
+            novels.append( 'Found in Pubchem' )
+    Results = pd.DataFrame({'Native Substrate': unique_substrates, 'Native Product': unique_products, 'Products': unique_prods_smiles, 'Novel Compound?': novels, 'Enzymes': unique_enzymes})
+    Results = Results.drop_duplicates(cols=['Products'])
+            
+    print 'Novel Compounds found...'   
+    print len(novel_compounds)
+    print "Runtime..."
+    print stop - start    
+    product_pictures = Draw.MolsToGridImage(unique_prods,molsPerRow=8, includeAtomNumbers=False)
+    
+    return Results, product_pictures
+
