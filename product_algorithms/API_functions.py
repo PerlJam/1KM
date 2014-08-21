@@ -213,9 +213,63 @@ def cross_validate_sliding_threshold(ec_number):
     return validation_per_percent
 
 
-# In[5]:
+# In[6]:
 
-def find_alternative_substrates(enzyme):
+def tanimoto_candidates(target, steroidlist):
+    '''given a list of compounds, will compare to your target---can be used for quick candidate truncation'''
+    steroidmols = [Chem.MolFromSmiles(i) for i in steroidlist]
+
+    for m in steroidmols: AllChem.Compute2DCoords(m)
+    steroidlist_fps=[AllChem.GetMorganFingerprintAsBitVect(x,2) for x in steroidmols]
+    
+    #recombine endogenous structures with their scores
+    sims = DataStructs.BulkTanimotoSimilarity(steroidlist_fps[0],steroidlist_fps)
+    nbrs = sorted(zip(sims,steroidmols),reverse=True)
+    
+    #grab bottom 10% of matches
+    negative_structures = [x[1] for x in nbrs[:20]]
+    negative_smiles = []
+    for i in negative_structures:
+        negative_smiles.append( Chem.MolToSmiles(i) )
+        
+    nbrs_filtered = []
+    for i in nbrs:
+        if i[0] > .40:
+            nbrs_filtered.append( i )
+    #Draw.MolsToGridImage([x[1] for x in nbrs_filtered[:]],legends=['%.4f'%x[0] for x in nbrs_filtered])        
+    return nbrs_filtered
+
+
+# In[7]:
+
+def retrieve_pathway_participation(pathway):
+    '''given a kegg pathway, will find the enzymes that have the largest number of substrates'''
+    s = Kegg()
+    pathwaydata = s.parse_kgml_pathway(str(pathway))
+    
+    enzyme_activities = []
+    for i in xrange(len(pathwaydata['entries'])):
+        enzyme_activities.append( pathwaydata['entries'][i]['gene_names'] ) 
+    enzyme_participation = Counter(enzyme_activities).most_common()
+    return enzyme_participation
+
+
+def canonicalize_smiles(smiles_list):
+    canonical_smiles = []
+    for i in smiles_list:
+        i = Chem.MolFromSmiles(i)
+        i = Chem.MolToSmiles( i, canonical=True ) 
+        if '.' not in i:
+            canonical_smiles.append( i )   
+    return canonical_smiles
+
+def visualize_smiles(smiles_list):
+    vis = []
+    for i in list(set(smiles_list)):
+        vis.append( Chem.MolFromSmiles(i) )
+    return Draw.MolsToGridImage(vis,molsPerRow=8, includeAtomNumbers=False)    
+
+def rf_find_alternative_substrates(enzyme):
     
     ###grabs the substrates of the given enzyme and their smiles
     compound_names, positive_smiles = retrieve_enzyme_substrates(enzyme) 
@@ -280,52 +334,7 @@ def find_alternative_substrates(enzyme):
         if str( rf_classifier(mols, activities, steroidlist[i]) ) == '[1]':
             if steroidlist[i] not in mols:
                 values.append( steroidlist[i] )
-                
+    values = canonicalize_smiles(values)        
     return values, training_set
-
-
-# In[6]:
-
-def tanimoto_candidates(target, steroidlist):
-    '''given a list of compounds, will compare to your target---can be used for quick candidate truncation'''
-    steroidmols = [Chem.MolFromSmiles(i) for i in steroidlist]
-
-    for m in steroidmols: AllChem.Compute2DCoords(m)
-    steroidlist_fps=[AllChem.GetMorganFingerprintAsBitVect(x,2) for x in steroidmols]
-    
-    #recombine endogenous structures with their scores
-    sims = DataStructs.BulkTanimotoSimilarity(steroidlist_fps[0],steroidlist_fps)
-    nbrs = sorted(zip(sims,steroidmols),reverse=True)
-    
-    #grab bottom 10% of matches
-    negative_structures = [x[1] for x in nbrs[:20]]
-    negative_smiles = []
-    for i in negative_structures:
-        negative_smiles.append( Chem.MolToSmiles(i) )
-        
-    nbrs_filtered = []
-    for i in nbrs:
-        if i[0] > .40:
-            nbrs_filtered.append( i )
-    #Draw.MolsToGridImage([x[1] for x in nbrs_filtered[:]],legends=['%.4f'%x[0] for x in nbrs_filtered])        
-    return nbrs_filtered
-
-
-# In[7]:
-
-def retrieve_pathway_participation(pathway):
-    '''given a kegg pathway, will find the enzymes that have the largest number of substrates'''
-    s = Kegg()
-    pathwaydata = s.parse_kgml_pathway(str(pathway))
-    
-    enzyme_activities = []
-    for i in xrange(len(pathwaydata['entries'])):
-        enzyme_activities.append( pathwaydata['entries'][i]['gene_names'] ) 
-    enzyme_participation = Counter(enzyme_activities).most_common()
-    return enzyme_participation
-
-
-# In[ ]:
-
 
 
