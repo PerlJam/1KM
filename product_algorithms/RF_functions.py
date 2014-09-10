@@ -313,7 +313,7 @@ import pandas as pd
 
 # <codecell>
 
-def rf_classifier(enzymes, success, candidate):
+def rf_classifier(enzymes, success, candidate, threshold):
     # generate fingeprints: Morgan fingerprint with radius 2
     mols = []
     for i in enzymes:
@@ -341,7 +341,7 @@ def rf_classifier(enzymes, success, candidate):
     fp = numpy.zeros((1,))
     DataStructs.ConvertToNumpyArray(AllChem.GetMorganFingerprintAsBitVect(m6, 2), fp)
     
-    if rf.predict_proba(fp)[0][1] > 0.95:
+    if rf.predict_proba(fp)[0][1] > threshold:
         return '[1]'
     else:
         return '[0]'

@@ -215,7 +215,7 @@ def cross_validate_sliding_threshold(ec_number):
 
 # In[6]:
 
-def tanimoto_candidates(target, steroidlist):
+def tanimoto_candidates(target, steroidlist, threshold):
     '''given a list of compounds, will compare to your target---can be used for quick candidate truncation'''
     steroidmols = [Chem.MolFromSmiles(i) for i in steroidlist]
 
@@ -234,7 +234,7 @@ def tanimoto_candidates(target, steroidlist):
         
     nbrs_filtered = []
     for i in nbrs:
-        if i[0] > .40:
+        if i[0] > threshold:
             nbrs_filtered.append( i )
     #Draw.MolsToGridImage([x[1] for x in nbrs_filtered[:]],legends=['%.4f'%x[0] for x in nbrs_filtered])        
     return nbrs_filtered
@@ -269,7 +269,7 @@ def visualize_smiles(smiles_list):
         vis.append( Chem.MolFromSmiles(i) )
     return Draw.MolsToGridImage(vis,molsPerRow=8, includeAtomNumbers=False)    
 
-def rf_find_alternative_substrates(enzyme):
+def rf_find_alternative_substrates(enzyme, dataset, threshold):
     
     ###grabs the substrates of the given enzyme and their smiles
     compound_names, positive_smiles = retrieve_enzyme_substrates(enzyme) 
@@ -325,15 +325,15 @@ def rf_find_alternative_substrates(enzyme):
     ###our model
     training_set = pd.DataFrame({'Smiles': smiles, 'Activity': activity, 'Compound Name': compound_names})
     
-    ###identity is hard coded in the other file as 70%
+    ###identity is in the RF_functions.py file 
     values = [] 
     mols = training_set['Smiles'].tolist()
     activities = training_set['Activity'].tolist()
     
-    for i in range(len(steroidlist)):
-        if str( rf_classifier(mols, activities, steroidlist[i]) ) == '[1]':
-            if steroidlist[i] not in mols:
-                values.append( steroidlist[i] )
+    for i in range(len(dataset)):
+        if str( rf_classifier(mols, activities, dataset[i], threshold) ) == '[1]':
+            if dataset[i] not in mols:
+                values.append( dataset[i] )
     values = canonicalize_smiles(values)        
     return values, training_set
 

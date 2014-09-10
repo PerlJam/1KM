@@ -27,8 +27,8 @@ from rdkit.Chem import AllChem
 # <codecell>
 
 def create_lexicon(molecule1, molecule2):
-    Chem.Kekulize(molecule1)
-    Chem.Kekulize(molecule2)
+    #Chem.Kekulize(molecule1)
+    #Chem.Kekulize(molecule2)
     patt1 = Chem.MolFromSmarts(MCS.FindMCS([molecule2, molecule1], matchValences=True).smarts)
     matching1 = molecule2.GetSubstructMatch(patt1)
     matching2 = molecule1.GetSubstructMatch(patt1)
@@ -1054,16 +1054,133 @@ def scan_atoms(t, s, p):
     
     if len(equivalent_target_atoms) == 0:
         return "do not proceed"
-    if len(equivalent_sub_atoms) != len(equivalent_target_atoms):
-        return 'do not proceed'
+    #if len(equivalent_sub_atoms) != len(equivalent_target_atoms):
+    #    return 'do not proceed'
     for i in equivalent_target_atoms:
         if i in target_specific_atoms:
             return 'do not proceed'
         else:
             return 'proceed'
 
-def prediction_algorithm(target_smiles, df):
+def naive_find_alternative_substrates(input_smiles_list, df, df_row, threshold):
+    '''uses the naive approach to finding an alternative substrate by comparing the area around where an enzyme performs transformation and areas that are unique to your target'''
+    input_smiles_list = tanimoto_candidates(df['Substrates'].irow(df_row), list(set(input_smiles_list)), threshold) ###this function quickly narrows down potential candidates for doing the naive alternative substrate search
+    tally = []
+    print "Progress..."
+    for z in range(len(input_smiles_list)):
+        try:
+            t = input_smiles_list[z][1]
+            s = Chem.MolFromSmiles( df['Substrates'].irow(df_row) )
+            p = Chem.MolFromSmiles( df['Products'].irow(df_row) )
+            tally.append( scan_atoms(t, s, p) )
+            if z % 10 == 0 and z != 0:
+                    print z  
+        except:
+            tally.append( 'do not proceed' )
+    #mol_smiles = [Chem.MolToSmiles(x, canonical=True) for x in input_smiles_list[1]]
+    mol_smiles = []
+    for i in range(len(input_smiles_list)):
+        mol_smiles.append( Chem.MolToSmiles(input_smiles_list[i][1]) )
+    mol_scores = ['%.4f'%x[0] for x in input_smiles_list]
+    compatible_mols = pd.DataFrame({'Alternative Substrate SMILES': mol_smiles, 'Tanimoto Similarity': mol_scores, 'Compatible': tally})
+    compatible_mols = compatible_mols[compatible_mols['Compatible'] == 'proceed']
+    #print compatible_mols['Alternative Substrate SMILES'].tolist()
+    mol_pictures = []
+    for i in compatible_mols['Alternative Substrate SMILES'].tolist():
+        mol_pictures.append( Chem.MolFromSmiles(i) )
+    mol_pics = Draw.MolsToGridImage(mol_pictures, molsPerRow=8) 
+    print "Finished"
+    return compatible_mols, mol_pics
 
+def tanimoto_candidates(target, steroidlist, threshold):
+    '''given a list of compounds, will compare to your target---can be used for quick candidate truncation'''
+    steroidmols = [Chem.MolFromSmiles(i) for i in steroidlist]
+
+    for m in steroidmols: AllChem.Compute2DCoords(m)
+    steroidlist_fps=[AllChem.GetMorganFingerprintAsBitVect(x,2) for x in steroidmols]
+    
+    #recombine endogenous structures with their scores
+    sims = DataStructs.BulkTanimotoSimilarity(steroidlist_fps[0],steroidlist_fps)
+    nbrs = sorted(zip(sims,steroidmols),reverse=True)
+    
+    #grab bottom 10% of matches
+    negative_structures = [x[1] for x in nbrs[:20]]
+    negative_smiles = []
+    for i in negative_structures:
+        negative_smiles.append( Chem.MolToSmiles(i) )
+        
+    nbrs_filtered = []
+    for i in nbrs:
+        if i[0] > threshold:
+            nbrs_filtered.append( i )
+    #Draw.MolsToGridImage([x[1] for x in nbrs_filtered[:]],legends=['%.4f'%x[0] for x in nbrs_filtered])        
+    return nbrs_filtered
+
+
+def product_prediction_algorithm(target_smiles_list, df, row):
+
+    start = timeit.default_timer()
+    targets = []
+    substrates = []
+    products = []
+    results = []
+    enzymes = []
+    for x in xrange(len(df)):
+        try:
+            results.append( explore_substrate(target_smiles_list[x], row, df) )
+            substrates.append( df['Substrates'].irow(row) )
+            products.append( df['Products'].irow(row) )
+            targets.append( target_smiles_list[x] )
+            enzymes.append( df['Enzymes'].irow(row) )
+        except:
+            pass
+        
+    stop = timeit.default_timer()
+    #unique_prods, unique_substrates, unique_products, unique_enzymes = filter_results(results, substrates, products, TestUni, enzymes)
+    unique_prods, unique_substrates, unique_products, unique_enzymes = results, substrates, products, enzymes
+    
+    print "Finished reactions... searching hits on PubChem... "
+    
+    #search pubchem for unique hits
+    novel_compounds = []
+    for i in unique_prods:
+	try:
+	    searches = pcp.get_compounds('CanonicalSMILES', str(Chem.MolToSmiles(i)), 'smiles')
+	    if str(searches) == '[Compound()]':
+	        novel_compounds.append( i )
+	except:
+	    pass
+            
+    #put things in a df
+    unique_prods_smiles = []
+    novel_smiles = []
+    for i in unique_prods:
+        unique_prods_smiles.append( Chem.MolToSmiles(i) )
+    for i in novel_compounds:
+        novel_smiles.append( Chem.MolToSmiles(i) )
+    
+    novels =[ ]
+    for i in unique_prods_smiles:
+        if i in novel_smiles:
+            novels.append( 'Novel' )
+        else:
+            novels.append( 'Found in Pubchem' )
+
+    Results = pd.DataFrame({'Native Substrate': unique_substrates, 'Native Product': unique_products, 'Products': unique_prods_smiles, 'Novel Compound?': novels, 'Enzymes': unique_enzymes})
+    Results = Results.drop_duplicates(cols=['Products'])
+            
+    print 'Novel Compounds found...'   
+    print len(novel_compounds)
+    print "Runtime..."
+    print stop - start    
+    product_pictures = Draw.MolsToGridImage(unique_prods,molsPerRow=8, includeAtomNumbers=False)
+    
+    return Results, product_pictures
+
+
+
+def prediction_algorithm2(target_smiles, df):
+    '''iterates through an entire df instead of a target smiles list'''
     start = timeit.default_timer()
     TestUni = df
     chol = str(target_smiles)
@@ -1074,7 +1191,7 @@ def prediction_algorithm(target_smiles, df):
             s = Chem.MolFromSmiles( TestUni['Substrates'].irow(z) )
             p = Chem.MolFromSmiles( TestUni['Products'].irow(z) )
             tally.append( scan_atoms(t, s, p) )
-            if z % 10 == 0:
+            if z % 10 == 0 and z != 0:
                     print z  
         except:
             tally.append( 'do not proceed' )
