@@ -1,0 +1,13 @@
+Drug IDs	Drug Names	Drug Smiles
+D00187	Ergocalciferol	C[C@H](/C=C/[C@H](C)C(C)C)[C@H]1CC[C@@H]\2[C@@]1(CCC/C2=C\C=C/3\C[C@H](CCC3=C)O)C
+D00299	Dihydrotachysterol	C[C@H]\1CC[C@@H](C/C1=C\C=C\2/CCC[C@]3([C@H]2CC[C@@H]3[C@H](C)/C=C/[C@H](C)C(C)C)C)O
+D01518	Alfacalcidol	C[C@H](CCCC(C)C)[C@H]1CC[C@@H]\2[C@@]1(CCC/C2=C\C=C/3\C[C@H](C[C@@H](C3=C)O)O)C
+D00129	Calcitriol	C[C@H](CCCC(C)(C)O)[C@H]1CC[C@@H]\2[C@@]1(CCC/C2=C\C=C/3\C[C@H](C[C@@H](C3=C)O)O)C
+D00188	Colecalciferol	C[C@H](CCCC(C)C)[C@H]1CC[C@@H]\2[C@@]1(CCC/C2=C\C=C/3\C[C@H](CCC3=C)O)C
+D01125	Calcipotriol	C[C@H](/C=C/[C@H](C1CC1)O)[C@H]2CC[C@@H]\3[C@@]2(CCC/C3=C\C=C/4\C[C@H](C[C@@H](C4=C)O)O)C
+D01472	Tacalcitol	C[C@H](CC[C@H](C(C)C)O)[C@H]1CC[C@@H]\2[C@@]1(CCC/C2=C\C=C/3\C[C@H](C[C@@H](C3=C)O)O)C
+D00930	Paricalcitol	C[C@H](/C=C/[C@H](C)C(C)(C)O)[C@H]1CC[C@@H]\2[C@@]1(CCC/C2=C\C=C3C[C@H](C[C@@H](C3)O)O)C
+D01098	Maxacalcitol	C[C@@H]([C@H]1CC[C@@H]\2[C@@]1(CCC/C2=C\C=C/3\C[C@H](C[C@@H](C3=C)O)O)C)OCCC(C)(C)O
+D01662 	Falecalcitriol	C[C@H](CCCC(C(F)(F)F)(C(F)(F)F)O)[C@H]1CC[C@@H]\2[C@@]1(CCC/C2=C\C=C/3\C[C@H](C[C@@H](C3=C)O)O)C
+D07578	Eldecalcitol	O[C@H]1CC(\C(=C)[C@H](O)[C@H]1OCCCO)=C\C=C2/CCC[C@]3([C@H]2CC[C@@H]3[C@H](C)CCCC(O)(C)C)C
+D08868	Becocalcidiol	CC[C@H](C)[C@H]1CC[C@@H]\2[C@@]1(CCC/C2=C\C=C3C[C@H](C(=C)[C@@H](C3)O)O)C

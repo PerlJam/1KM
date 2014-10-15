@@ -1,0 +1,35 @@
+Drug IDs	Drug Names	Drug Smiles
+D00182	Norethisterone	C[C@]12CC[C@H]3[C@H]([C@@H]1CC[C@]2(C#C)O)CCC4=CC(=O)CC[C@H]34
+D01580	Lynestrenol	C[C@]12CC[C@H]3[C@H]([C@@H]1CC[C@]2(C#C)O)CCC4=CCCC[C@H]34
+D00950	Levonorgestrel	CC[C@]12CC[C@H]3[C@H]([C@@H]1CC[C@]2(C#C)O)CCC4=CC(=O)CC[C@H]34
+D05679	Quingestanol	C[C@]12CC[C@@H]3[C@H]4CCC(=CC4=CC[C@H]3[C@@H]1CC[C@]2(C#C)O)OC5CCCC5
+D00952	Megestrol	CC1=C[C@@H]2[C@H](CC[C@]3([C@H]2CC[C@@]3(C(=O)C)O)C)[C@@]4(C1=CC(=O)CC4)C
+D00951	Medroxyprogesterone	C[C@H]1C[C@@H]2[C@H](CC[C@]3([C@H]2CC[C@@]3(C(=O)C)O)C)[C@@]4(C1=CC(=O)CC4)C
+D07220	Norgestrienone	C[C@]12C=CC3=C4CCC(=O)C=C4CC[C@H]3[C@@H]1CC[C@]2(C#C)O
+D04104	Etonogestrel	CC[C@]12CC(=C)[C@H]3[C@H]([C@@H]1CC[C@]2(C#C)O)CCC4=CC(=O)CC[C@H]34
+D02367	Desogestrel	CC[C@]12CC(=C)[C@H]3[C@H]([C@@H]1CC[C@]2(C#C)O)CCC4=CCCC[C@H]34
+D09567	Ulipristal	CC(=O)[C@]1(CC[C@@H]2[C@@]1(C[C@@H](C3=C4CCC(=O)C=C4CC[C@@H]23)C5=CC=C(C=C5)N(C)C)C)O
+D01159	Gestonorone	CC(=O)[C@]1(CC[C@@H]2[C@@]1(CC[C@H]3[C@H]2CCC4=CC(=O)CC[C@H]34)C)O
+D00949	Hydroxyprogesterone	CC(=O)[C@]1(CC[C@@H]2[C@@]1(CC[C@H]3[C@H]2CCC4=CC(=O)CC[C@]34C)C)O
+D00066	Progesterone	CC(=O)[C@H]1CC[C@@H]2[C@@]1(CC[C@H]3[C@H]2CCC4=CC(=O)CC[C@]34C)C
+D01217	Dydrogesterone	CC(=O)[C@H]1CC[C@@H]2[C@@]1(CC[C@@H]3[C@H]2C=CC4=CC(=O)CC[C@@]34C)C
+D04885	Medrogestone	CC1=CC2C(CCC3(C2CCC3(C)C(=O)C)C)C4(C1=CC(=O)CC4)C
+D07222	Nomegestrol	CC1=C[C@@H]2[C@H](CC[C@]3([C@H]2CC[C@@]3(C(=O)C)O)C)[C@@H]4C1=CC(=O)CC4
+D07223	Demegestone	CC(=O)[C@]1(CC[C@@H]2[C@@]1(CCC3=C4CCC(=O)C=C4CC[C@@H]23)C)C
+D01299	Chlormadinone	CC(=O)[C@]1(CC[C@@H]2[C@@]1(CC[C@H]3[C@H]2C=C(C4=CC(=O)CC[C@]34C)Cl)C)O
+D08431	Promegestone	CCC(=O)[C@]1(CC[C@@H]2[C@@]1(CCC3=C4CCC(=O)C=C4CC[C@@H]23)C)C
+D03799	Dienogest	C[C@]12CCC3=C4CCC(=O)C=C4CC[C@H]3[C@@H]1CC[C@]2(CC#N)O
+D01374	Allylestrenol	C[C@]12CC[C@H]3[C@H]([C@@H]1CC[C@]2(CC=C)O)CCC4=CCCC[C@H]34
+D01294	Etynodiol	C[C@]12CC[C@H]3[C@H]([C@@H]1CC[C@]2(C#C)O)CCC4=C[C@H](CC[C@H]34)O
+D00289	Danazol	C[C@]12CC[C@H]3[C@H]([C@@H]1CC[C@]2(C#C)O)CCC4=CC5=C(C[C@]34C)C=NO5
+D00585	Mifepristone	CC#C[C@@]1(CC[C@@H]2[C@@]1(C[C@@H](C3=C4CCC(=O)C=C4CC[C@@H]23)C5=CC=C(C=C5)N(C)C)C)O
+D00954	Norgestrel	CC[C@]12CC[C@H]3[C@H]([C@@H]1CC[C@]2(C#C)O)CCC4=CC(=O)CC[C@H]34
+D02996	Asoprisnil	O=C5\C=C4/C(=C3/[C@@H](c1ccc(\C=N\O)cc1)C[C@]2([C@@H](CC[C@@]2(OC)COC)[C@@H]3CC4)C)CC5
+D04316	Gestodene	O=C4\C=C3/[C@@H]([C@H]2CC[C@]1([C@@H](/C=C\[C@]1(C#C)O)[C@@H]2CC3)CC)CC4
+D05003 	Methynodiol diacetate	O=C4\C=C2/[C@@H]([C@H]1CC[C@@]3([C@](O)(\C=C)CC[C@H]3[C@@H]1CC2)C)CC4
+D05209  	Norgestimate	CC[C@]12CC[C@H]3[C@H]([C@@H]1CC[C@]2(C#C)OC(=O)C)CCC4=C/C(=N/O)/CC[C@H]34
+D07096	Aglepristone	C/C=C\[C@@]1(CC[C@@H]2[C@@]1(C[C@@H](C3=C4CCC(=O)C=C4CC[C@@H]23)C5=CC=C(C=C5)N(C)C)C)O
+D08429	Proligestone	CCC1OC23CC[C@]([C@]2(CC[C@H]4[C@H]3CCC5=CC(=O)CC[C@]45C)C)(O1)C(=O)C
+D09571  	Onapristone 	[C@H]4(C2=C1C(=CC(=O)CC1)CCC2C3C(C(O)(CC3)CCCO)(C4)C)C5=CC=C(N(C)C)C=C5
+D09972	Telapristone acetate	O=C5\C=C3/C(=C2/[C@@H](c1ccc(N(C)C)cc1)C[C@@]4([C@@](OC(=O)C)(C(=O)COC)CC[C@H]4[C@@H]2CC3)C)CC5
+D10016	Lonaprisan	 [H][C@@]12CC[C@@](O)(C(F)(F)C(F)(F)F)[C@@]1(C)C[C@@]([H])(C1=C3CCC(=O)C=C3CC[C@@]21[H])c1ccc(cc1)C(C)=O
